@@ -6,39 +6,39 @@
 
 ::============================================================================
 ::
-::   IDM Activation Script (IAS)
+::   IDM 啟動腳本 (IAS)
 ::
 ::   Homepages: https://github.com/WindowsAddict/IDM-Activation-Script
 ::              https://massgrave.dev/idm-activation-script
 ::
-::       Email: windowsaddict@protonmail.com
+::       電子郵件：windowsaddict@protonmail.com
 ::
 ::============================================================================
 
 
 
-::  To activate, run the script with "/act" parameter or change 0 to 1 in below line
+::  若要激活，請使用“/act”參數運行腳本或將以下行中的 0 變更為 1
 set _activate=0
 
-::  To Freeze the 30 days trial period, run the script with "/frz" parameter or change 0 to 1 in below line
+::  若要凍結 30 天試用期，請使用「/frz」參數執行腳本或將以下行中的 0 變更為 1
 set _freeze=0
 
-::  To reset the activation and trial, run the script with "/res" parameter or change 0 to 1 in below line
+::  若要重設啟動和試用，請使用“/res”參數執行腳本或將以下行中的 0 變更為 1
 set _reset=0
 
-::  If value is changed in above lines or parameter is used then script will run in unattended mode
+::  如果以上行中的值發生變更或使用參數，則腳本將以無人值守模式執行
 
 ::========================================================================================================================================
 
-::  Set Path variable, it helps if it is misconfigured in the system
+::  設定Path變量，如果系統中配置錯誤，它會有所幫助
 
 set "PATH=%SystemRoot%\System32;%SystemRoot%\System32\wbem;%SystemRoot%\System32\WindowsPowerShell\v1.0\"
 if exist "%SystemRoot%\Sysnative\reg.exe" (
 set "PATH=%SystemRoot%\Sysnative;%SystemRoot%\Sysnative\wbem;%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\;%PATH%"
 )
 
-:: Re-launch the script with x64 process if it was initiated by x86 process on x64 bit Windows
-:: or with ARM64 process if it was initiated by x86/ARM32 process on ARM64 Windows
+:: 如果腳本是由 x64 位元 Windows 上的 x86 進程啟動，則使用 x64 進程重新啟動該腳本
+:: 或使用 ARM64 進程（如果它是由 ARM64 Windows 上的 x86/ARM32 進程啟動）
 
 set "_cmdf=%~f0"
 for %%# in (%*) do (
@@ -52,7 +52,7 @@ start %SystemRoot%\Sysnative\cmd.exe /c ""!_cmdf!" %* r1"
 exit /b
 )
 
-:: Re-launch the script with ARM32 process if it was initiated by x64 process on ARM64 Windows
+:: 如果腳本是由 ARM64 Windows 上的 x64 進程啟動的，則使用 ARM32 進程重新啟動該腳本
 
 if exist %SystemRoot%\SysArm32\cmd.exe if %PROCESSOR_ARCHITECTURE%==AMD64 if not defined r2 (
 setlocal EnableDelayedExpansion
@@ -65,27 +65,27 @@ exit /b
 set "blank="
 set "mas=ht%blank%tps%blank%://mass%blank%grave.dev/"
 
-::  Check if Null service is working, it's important for the batch script
+::  檢查 Null 服務是否正常運作，這對於批次腳本很重要
 
 sc query Null | find /i "RUNNING"
 if %errorlevel% NEQ 0 (
 echo:
-echo Null service is not running, script may crash...
+echo 空服務未運行，腳本可能崩潰...
 echo:
 echo:
-echo Help - %mas%idm-activation-script.html#Troubleshoot
+echo 幫助 - %mas%idm-activation-script.html#Troubleshoot
 echo:
 echo:
 ping 127.0.0.1 -n 10
 )
 cls
 
-::  Check LF line ending
+::  檢查 LF 行結尾
 
 pushd "%~dp0"
 >nul findstr /v "$" "%~nx0" && (
 echo:
-echo Error: Script either has LF line ending issue or an empty line at the end of the script is missing.
+echo 錯誤：腳本存在 LF 行結束問題或腳本結尾缺少空白行.
 echo:
 ping 127.0.0.1 -n 6 >nul
 popd
@@ -97,7 +97,7 @@ popd
 
 cls
 color 07
-title  IDM Activation Script %iasver%
+title  IDM 啟動腳本 %iasver%
 
 set _args=
 set _elev=
@@ -159,20 +159,20 @@ set "_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=3
 
 if %winbuild% LSS 7600 (
 %nceline%
-echo Unsupported OS version Detected [%winbuild%].
-echo Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
+echo 偵測到不支援的作業系統版本 [%winbuild%].
+echo 僅 Windows 7/8/8.1/10/11 及其等效伺服器支援項目.
 goto done2
 )
 
 for %%# in (powershell.exe) do @if "%%~$PATH:#"=="" (
 %nceline%
-echo Unable to find powershell.exe in the system.
+echo 系統中找不到powershell.exe.
 goto done2
 )
 
 ::========================================================================================================================================
 
-::  Fix for the special characters limitation in path name
+::  修復路徑名中的特殊字元限制
 
 set "_work=%~dp0"
 if "%_work:~-1%"=="\" set "_work=%_work:~0,-1%"
@@ -193,17 +193,17 @@ setlocal EnableDelayedExpansion
 echo "!_batf!" | find /i "!_ttemp!" %nul1% && (
 if /i not "!_work!"=="!_ttemp!" (
 %eline%
-echo Script is launched from the temp folder,
-echo Most likely you are running the script directly from the archive file.
+echo 腳本從臨時資料夾啟動,
+echo 您很可能直接從存檔文件運行腳本.
 echo:
-echo Extract the archive file and launch the script from the extracted folder.
+echo 提取存檔檔案並從提取的資料夾中啟動腳本.
 goto done2
 )
 )
 
 ::========================================================================================================================================
 
-::  Check PowerShell
+::  檢查 PowerShell
 
 REM :PowerShellTest: $ExecutionContext.SessionState.LanguageMode :PowerShellTest:
 
@@ -211,28 +211,28 @@ REM :PowerShellTest: $ExecutionContext.SessionState.LanguageMode :PowerShellTest
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
 echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
+echo PowerShell 無法運作。正在中止...
+echo 如果您對 Powershell 應用了限制，請撤銷這些更改.
 echo:
-echo Check this page for help. %mas%idm-activation-script.html#Troubleshoot
+echo 檢查此頁面尋求協助。 %mas%idm-activation-script.html#疑難排解
 goto done2
 )
 
 ::========================================================================================================================================
 
-::  Elevate script as admin and pass arguments and preventing loop
+::  將腳本提升為管理員並傳遞參數並防止循環
 
 %nul1% fltmc || (
 if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg!\"' -verb runas" && exit /b
 %eline%
-echo This script requires admin privileges.
-echo To do so, right click on this script and select 'Run as administrator'.
+echo 該腳本需要管理員權限.
+echo 為此，請右鍵單擊此腳本並選擇“以管理員身份執行”'.
 goto done2
 )
 
 ::========================================================================================================================================
 
-::  Disable QuickEdit and launch from conhost.exe to avoid Terminal app
+::  停用 QuickEdit 並從 conhost.exe 啟動以避免終端應用程式
 
 set quedit=
 set terminal=
@@ -265,7 +265,7 @@ if defined quedit goto :skipQE
 
 ::========================================================================================================================================
 
-::  Check for updates
+::  檢查更新
 
 set -=
 set old=
@@ -277,14 +277,14 @@ if not [%%#]==[] (echo "%%#" | find "127.69" %nul1% && (echo "%%#" | find "127.6
 if defined old (
 echo ________________________________________________
 %eline%
-echo You are running outdated version IAS %iasver%
+echo        您正在運行過時的 IAS 版本 %iasver%
 echo ________________________________________________
 echo:
 if not %_unattended%==1 (
-echo [1] Get Latest IAS
-echo [0] Continue Anyway
+echo [1] 取得最新的 IAS
+echo [0] 無論如何繼續
 echo:
-call :_color %_Green% "Enter a menu option in the Keyboard [1,0] :"
+call :_color %_Green% "在鍵盤中輸入選單選項 [1,0] :"
 choice /C:10 /N
 if !errorlevel!==2 rem
 if !errorlevel!==1 (start https://github.com/WindowsAddict/IDM-Activation-Script & start %mas%/idm-activation-script & exit /b)
@@ -294,10 +294,10 @@ if !errorlevel!==1 (start https://github.com/WindowsAddict/IDM-Activation-Script
 ::========================================================================================================================================
 
 cls
-title  IDM Activation Script %iasver%
+title  IDM 啟動腳本 %iasver%
 
 echo:
-echo Initializing...
+echo 正在初始化...
 
 ::  Check WMI
 
@@ -305,13 +305,13 @@ echo Initializing...
 %eline%
 %psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName"
 echo:
-echo WMI is not working. Aborting...
+echo WMI 不工作。正在中止...
 echo:
-echo Check this page for help. %mas%idm-activation-script.html#Troubleshoot
+echo 檢查此頁面尋求協助。 %mas%idm-activation-script.html#疑難排解
 goto done2
 )
 
-::  Check user account SID
+::  檢查使用者帳戶SID
 
 set _sid=
 for /f "delims=" %%a in ('%psc% "([System.Security.Principal.NTAccount](Get-WmiObject -Class Win32_ComputerSystem).UserName).Translate([System.Security.Principal.SecurityIdentifier]).Value" %nul6%') do (set _sid=%%a)
@@ -324,15 +324,15 @@ reg query HKU\%_sid%\Software %nul% || (
 %eline%
 echo:
 echo [%_sid%]
-echo User Account SID not found. Aborting...
+echo 未找到使用者帳戶 SID。正在中止...
 echo:
-echo Check this page for help. %mas%idm-activation-script.html#Troubleshoot
+echo 檢查此頁面尋求協助。 %mas%idm-activation-script.html#疑難排解
 goto done2
 )
 
 ::========================================================================================================================================
 
-::  Check if the current user SID is syncing with the HKCU entries
+::  檢查目前使用者 SID 是否與 HKCU 條目同步
 
 %nul% reg delete HKCU\IAS_TEST /f
 %nul% reg delete HKU\%_sid%\IAS_TEST /f
@@ -346,7 +346,7 @@ set HKCUsync=1
 %nul% reg delete HKCU\IAS_TEST /f
 %nul% reg delete HKU\%_sid%\IAS_TEST /f
 
-::  Below code also works for ARM64 Windows 10 (including x64 bit emulation)
+::  下面的程式碼也適用於 ARM64 Windows 10（包括 x64 位元模擬）
 
 for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v PROCESSOR_ARCHITECTURE') do set arch=%%b
 if /i not "%arch%"=="x86" set arch=x64
@@ -371,14 +371,14 @@ if %arch%==x86 set "IDMan=%ProgramFiles%\Internet Download Manager\IDMan.exe"
 if not exist %SystemRoot%\Temp md %SystemRoot%\Temp
 set "idmcheck=tasklist /fi "imagename eq idman.exe" | findstr /i "idman.exe" %nul1%"
 
-::  Check CLSID registry access
+::  檢查 CLSID 註冊表訪問
 
 %nul% reg add %CLSID2%\IAS_TEST
 %nul% reg query %CLSID2%\IAS_TEST || (
 %eline%
-echo Failed to write in %CLSID2%
+echo 寫入失敗 %CLSID2%
 echo:
-echo Check this page for help. %mas%idm-activation-script.html#Troubleshoot
+echo 檢查此頁面尋求協助。 %mas%idm-activation-script.html#疑難排解
 goto done2
 )
 
@@ -393,7 +393,7 @@ if %_freeze%==1 (set frz=1&goto :_activate)
 :MainMenu
 
 cls
-title  IDM Activation Script %iasver%
+title  IDM 啟動腳本 %iasver%
 if not defined terminal mode 75, 28
 
 echo:
@@ -405,16 +405,16 @@ echo:
 echo:            ___________________________________________________ 
 echo:                                                               
 echo:               [1] Freeze Trial
-echo:               [2] Activate ^(Not working^)
-echo:               [3] Reset Activation / Trial
+echo:               [2] 啟用 ^(Not working^)
+echo:               [3] 重置激活/試用
 echo:               _____________________________________________   
 echo:                                                               
-echo:               [4] Download IDM
-echo:               [5] Help
+echo:               [4] 下載IDM
+echo:               [5] 幫助
 echo:               [0] Exit
 echo:            ___________________________________________________
 echo:         
-call :_color2 %_White% "             " %_Green% "Enter a menu option in the Keyboard [1,2,3,4,5,0]"
+call :_color2 %_White% "             " %_Green% 「在鍵盤中輸入選單選項 [1,2,3,4,5,0]"
 choice /C:123450 /N
 set _erl=%errorlevel%
 
@@ -445,7 +445,7 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo Creating backup of CLSID registry keys in %SystemRoot%\Temp
+echo 建立 CLSID 登錄項目的備份 %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
@@ -458,14 +458,14 @@ call :add_key
 echo:
 echo %line%
 echo:
-call :_color %Green% "The IDM reset process has been completed."
+call :_color %Green% "IDM重置程序已完成."
 
 goto done
 
 :delete_queue
 
 echo:
-echo Deleting IDM registry keys...
+echo 刪除 IDM 註冊表項...
 echo:
 
 for %%# in (
@@ -531,12 +531,12 @@ if %frz%==0 if %_unattended%==0 (
 echo:
 echo %line%
 echo:
-echo      Activation is not working for some users and IDM may show fake serial nag screen.
+echo      某些用戶無法激活，IDM 可能會顯示虛假的串行導航螢幕.
 echo:
 call :_color2 %_White% "     " %_Green% "Its recommended to use Freeze Trial option instead."
 echo %line%
 echo:
-choice /C:19 /N /M ">    [1] Go Back [9] Activate : "
+choice /C:19 /N /M ">    [1] 返回 [9] 激活 : "
 if !errorlevel!==1 goto :MainMenu
 cls
 )
@@ -544,11 +544,11 @@ cls
 echo:
 if not exist "%IDMan%" (
 call :_color %Red% "IDM [Internet Download Manager] is not Installed."
-echo You can download it from  https://www.internetdownloadmanager.com/download.html
+echo 您可以從以下位置下載：  https://www.internetdownloadmanager.com/download.html
 goto done
 )
 
-:: Internet check with internetdownloadmanager.com ping and port 80 test
+:: 使用 internetdownloadmanager.com ping 和連接埠 80 測試進行網路檢查
 
 set _int=
 for /f "delims=[] tokens=2" %%# in ('ping -n 1 internetdownloadmanager.com') do (if not [%%#]==[] set _int=1)
@@ -567,7 +567,7 @@ for /f "skip=2 tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Cont
 for /f "tokens=6-7 delims=[]. " %%i in ('ver') do if "%%j"=="" (set fullbuild=%%i) else (set fullbuild=%%i.%%j)
 for /f "tokens=2*" %%a in ('reg query "HKU\%_sid%\Software\DownloadManager" /v idmvers %nul6%') do set "IDMver=%%b"
 
-echo Checking Info - [%regwinos% ^| %fullbuild% ^| %regarch% ^| IDM: %IDMver%]
+echo 檢查訊息 - [%regwinos% ^| %fullbuild% ^| %regarch% ^| IDM: %IDMver%]
 
 %idmcheck% && (echo: & taskkill /f /im idman.exe)
 
@@ -575,7 +575,7 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo Creating backup of CLSID registry keys in %SystemRoot%\Temp
+echo 建立 CLSID 登錄項目的備份  %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
@@ -590,9 +590,9 @@ if %frz%==0 call :register_IDM
 call :download_files
 if not defined _fileexist (
 %eline%
-echo Error: Unable to download files with IDM.
+echo 錯誤：無法使用 IDM 下載文件.
 echo:
-echo Help: %mas%idm-activation-script.html#Troubleshoot
+echo 幫助: %mas%idm-activation-script.html#疑難排解
 goto :done
 )
 
@@ -602,13 +602,13 @@ echo:
 echo %line%
 echo:
 if %frz%==0 (
-call :_color %Green% "The IDM Activation process has been completed."
+call :_color %Green% "IDM 啟動程序已完成."
 echo:
-call :_color %Gray% "If the fake serial screen appears, use the Freeze Trial option instead."
+call :_color %Gray% "如果出現假串列螢幕，請改用「凍結試用」選項."
 ) else (
-call :_color %Green% "The IDM 30 days trial period is successfully freezed for Lifetime."
+call :_color %Green% "IDM 30天試用期成功凍結終身."
 echo:
-call :_color %Gray% "If IDM is showing a popup to register, reinstall IDM."
+call :_color %Gray% "如果 IDM 顯示註冊彈出窗口，請重新安裝 IDM."
 )
 
 ::========================================================================================================================================
@@ -621,10 +621,10 @@ echo:
 if %_unattended%==1 timeout /t 2 & exit /b
 
 if defined terminal (
-call :_color %_Yellow% "Press 0 key to return..."
+call :_color %_Yellow% "按0鍵返回..."
 choice /c 0 /n
 ) else (
-call :_color %_Yellow% "Press any key to return..."
+call :_color %_Yellow% "按任意鍵返回..."
 pause %nul1%
 )
 goto MainMenu
@@ -634,10 +634,10 @@ goto MainMenu
 if %_unattended%==1 timeout /t 2 & exit /b
 
 if defined terminal (
-echo Press 0 key to exit...
+echo 按0鍵退出...
 choice /c 0 /n
 ) else (
-echo Press any key to exit...
+echo 按任何一個鍵退出...
 pause %nul1%
 )
 exit /b
@@ -653,7 +653,7 @@ exit /b
 :register_IDM
 
 echo:
-echo Applying registration details...
+echo 申請註冊詳細信息...
 echo:
 
 set /a fname = %random% %% 9999 + 1000
@@ -678,7 +678,7 @@ exit /b
 :download_files
 
 echo:
-echo Triggering a few downloads to create certain registry keys, please wait...
+echo 觸發一些下載以建立某些註冊表項，請稍候...
 echo:
 
 set "file=%SystemRoot%\Temp\temp.png"
@@ -716,7 +716,7 @@ goto :Check_file
 :add_key
 
 echo:
-echo Adding registry key...
+echo 新增註冊表項...
 echo:
 
 set "reg="%HKLM%" /v "AdvIntDriverEnabled2""
@@ -939,4 +939,4 @@ echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
 exit /b
 
 ::========================================================================================================================================
-:: Leave empty line below
+:: 下面留空行
